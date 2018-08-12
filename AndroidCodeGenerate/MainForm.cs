@@ -69,7 +69,7 @@ namespace AndroidCodeGenerate
 	
 			Helpers.OnClipboardFileSystem((path) => {
 				if (Directory.Exists(path)) {
-					var files = Directory.GetFiles(path, "*.html");
+					var files = Directory.GetFiles(path, "*.html", SearchOption.AllDirectories);
 					foreach (var element in files) {
 						var str =	element.ReadAllText().Replace("<style type=\"text/css\">",
 							          "<style type=\"text/css\">*{font-family:Consolas}");
@@ -286,6 +286,89 @@ namespace AndroidCodeGenerate
 		{
 			Helpers.OnClipboardString(AndroidExtensions.FormatLog);
 	
+		}
+		void 提取字段名ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Helpers.OnClipboardString((v) => {
+			                            
+				textBox1.Text = AndroidExtensions.ExtractJavaField(v);
+				return null;
+			});
+			                            
+	
+		}
+		void 标准化字段名ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+	
+			Helpers.OnClipboardFileSystem((path) => {
+				 
+				if (File.Exists(path)) {
+					var list = textBox1.Text.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries)
+						.Select(i => i.Trim())
+						.OrderBy(i => i)
+						.Distinct().ToArray();
+					var content = path.ReadAllText();
+					 
+					foreach (var element in list) {
+						
+						content = Regex.Replace(content, "\\b" + element + "\\b", "m" + element.Capitalize());
+					}
+					path.WriteAllText(content);
+				}
+			                              	
+			});
+		}
+		void ToFloatToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Helpers.OnClipboardString(v => {
+				var array = v.Split(",".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+			                          	
+				return string.Join(",", array.Select(i => i.Trim() + ".toFloat()"));
+			});
+		}
+		void 排序字段ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Helpers.OnClipboardString(AndroidExtensions.FormatSortJavaField);
+		}
+		void 压缩子目录ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Helpers.OnClipboardFileSystem((path) => {
+				var directories = Directory.GetDirectories(path);
+				foreach (var element in directories) {
+					using (var zip = new Ionic.Zip.ZipFile(Encoding.GetEncoding("gbk"))) {
+						zip.AddDirectory(element);
+						zip.Save(element + ".zip");
+					}
+				}
+			});
+		}
+		void 复制目录文件结构ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Helpers.OnClipboardFileSystem((path) => {
+				 
+			                              	
+				if (path.IsDirectory()) {
+					 
+					path.CopyFileSystemTree(textBox1.Text);
+				}
+			                              	
+			});
+		}
+		void 排序indexhtmlToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Helpers.OnClipboardFileSystem((path) => {
+				 
+			                              	
+				if (path.IsDirectory()) {
+					 
+			                              		var files=Directory.GetFiles(path,"*.html",SearchOption.AllDirectories).Where(i=>i.EndsWith("index.html"));
+			                              		foreach (var element in files) {
+			                              			element.WriteAllText(AndroidExtensions.FormatJetBrainExportHtml(element));
+			                              		}
+				}
+			                              	
+			});
+		
 		}
 	}
 }
