@@ -57,6 +57,13 @@ namespace AndroidCodeGenerate
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ToolStripMenuItem 排序indexhtmlToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+		private System.Windows.Forms.ToolStripMenuItem trackerToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem tracker文件ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 模板数组ToolStripMenuItem;
+		private System.Windows.Forms.SplitContainer splitContainer1;
+		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.ToolStripButton sort_proper;
+		private System.Windows.Forms.ToolStripButton sortDelegateButton;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -82,6 +89,8 @@ namespace AndroidCodeGenerate
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.sortButton = new System.Windows.Forms.ToolStripButton();
+			this.sortDelegateButton = new System.Windows.Forms.ToolStripButton();
+			this.sort_proper = new System.Windows.Forms.ToolStripButton();
 			this.sortFunctionButton = new System.Windows.Forms.ToolStripButton();
 			this.menuItemToCodeButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -99,6 +108,8 @@ namespace AndroidCodeGenerate
 			this.JavaStaticKotlinButton = new System.Windows.Forms.ToolStripButton();
 			this.fileButton = new System.Windows.Forms.ToolStripSplitButton();
 			this.changeHTMLCSSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.排序indexhtmlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.cleanJavaFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.压缩目录下Kotlin文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.压缩安卓项目ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,6 +122,8 @@ namespace AndroidCodeGenerate
 			this.compileStripButton = new System.Windows.Forms.ToolStripButton();
 			this.logButton = new System.Windows.Forms.ToolStripSplitButton();
 			this.log文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.trackerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tracker文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.sqlStripButton = new System.Windows.Forms.ToolStripButton();
 			this.stringBuilderButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip3 = new System.Windows.Forms.ToolStrip();
@@ -120,18 +133,25 @@ namespace AndroidCodeGenerate
 			this.替换文件中ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.从配置文件替换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.保留正则表达式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.模板数组ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.排序indexhtmlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
 			this.toolStrip3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+			this.splitContainer1.Panel1.SuspendLayout();
+			this.splitContainer1.Panel2.SuspendLayout();
+			this.splitContainer1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// toolStrip1
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.sortButton,
+			this.sortDelegateButton,
+			this.sort_proper,
 			this.sortFunctionButton,
 			this.menuItemToCodeButton,
 			this.toolStripSeparator1,
@@ -155,6 +175,26 @@ namespace AndroidCodeGenerate
 			this.sortButton.Size = new System.Drawing.Size(36, 22);
 			this.sortButton.Text = "Sort";
 			this.sortButton.Click += new System.EventHandler(this.SortButtonClick);
+			// 
+			// sortDelegateButton
+			// 
+			this.sortDelegateButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.sortDelegateButton.Image = ((System.Drawing.Image)(resources.GetObject("sortDelegateButton.Image")));
+			this.sortDelegateButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.sortDelegateButton.Name = "sortDelegateButton";
+			this.sortDelegateButton.Size = new System.Drawing.Size(92, 22);
+			this.sortDelegateButton.Text = "Sort Delegate";
+			this.sortDelegateButton.Click += new System.EventHandler(this.SortDelegateButtonClick);
+			// 
+			// sort_proper
+			// 
+			this.sort_proper.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.sort_proper.Image = ((System.Drawing.Image)(resources.GetObject("sort_proper.Image")));
+			this.sort_proper.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.sort_proper.Name = "sort_proper";
+			this.sort_proper.Size = new System.Drawing.Size(60, 22);
+			this.sort_proper.Text = "Sort Pro";
+			this.sort_proper.Click += new System.EventHandler(this.Sort_properClick);
 			// 
 			// sortFunctionButton
 			// 
@@ -327,6 +367,18 @@ namespace AndroidCodeGenerate
 			this.changeHTMLCSSToolStripMenuItem.Text = "Change HTML CSS";
 			this.changeHTMLCSSToolStripMenuItem.Click += new System.EventHandler(this.ChangeHTMLCSSToolStripMenuItemClick);
 			// 
+			// 排序indexhtmlToolStripMenuItem
+			// 
+			this.排序indexhtmlToolStripMenuItem.Name = "排序indexhtmlToolStripMenuItem";
+			this.排序indexhtmlToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.排序indexhtmlToolStripMenuItem.Text = "排序index.html";
+			this.排序indexhtmlToolStripMenuItem.Click += new System.EventHandler(this.排序indexhtmlToolStripMenuItemClick);
+			// 
+			// toolStripSeparator5
+			// 
+			this.toolStripSeparator5.Name = "toolStripSeparator5";
+			this.toolStripSeparator5.Size = new System.Drawing.Size(190, 6);
+			// 
 			// cleanJavaFileToolStripMenuItem
 			// 
 			this.cleanJavaFileToolStripMenuItem.Name = "cleanJavaFileToolStripMenuItem";
@@ -400,7 +452,9 @@ namespace AndroidCodeGenerate
 			// 
 			this.logButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.logButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.log文件ToolStripMenuItem});
+			this.log文件ToolStripMenuItem,
+			this.trackerToolStripMenuItem,
+			this.tracker文件ToolStripMenuItem});
 			this.logButton.Image = ((System.Drawing.Image)(resources.GetObject("logButton.Image")));
 			this.logButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.logButton.Name = "logButton";
@@ -411,9 +465,23 @@ namespace AndroidCodeGenerate
 			// log文件ToolStripMenuItem
 			// 
 			this.log文件ToolStripMenuItem.Name = "log文件ToolStripMenuItem";
-			this.log文件ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+			this.log文件ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
 			this.log文件ToolStripMenuItem.Text = "Log文件";
 			this.log文件ToolStripMenuItem.Click += new System.EventHandler(this.LogButtonClick);
+			// 
+			// trackerToolStripMenuItem
+			// 
+			this.trackerToolStripMenuItem.Name = "trackerToolStripMenuItem";
+			this.trackerToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.trackerToolStripMenuItem.Text = "Tracker";
+			this.trackerToolStripMenuItem.Click += new System.EventHandler(this.TrackerToolStripMenuItemClick);
+			// 
+			// tracker文件ToolStripMenuItem
+			// 
+			this.tracker文件ToolStripMenuItem.Name = "tracker文件ToolStripMenuItem";
+			this.tracker文件ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.tracker文件ToolStripMenuItem.Text = "Tracker 文件";
+			this.tracker文件ToolStripMenuItem.Click += new System.EventHandler(this.Tracker文件ToolStripMenuItemClick);
 			// 
 			// sqlStripButton
 			// 
@@ -453,7 +521,9 @@ namespace AndroidCodeGenerate
 			"(?<=name\\=)\"[^\"]*?\"",
 			"Log\\.[a-z]\\([^\\)]*\\)",
 			"(?<!//)Log\\.[a-z]\\([^\\)]*\\)",
-			"(//\\s)*Tracker\\.[a-z]\\([^\\)]*\\)"});
+			"(//\\s)*Tracker\\.[a-z]\\([^\\)]*\\)",
+			"(?<=public static final int )[A-Z_0-9]+",
+			"^\\s+TODO\\([^\\n]*\\n"});
 			this.toolStripComboBox1.Name = "toolStripComboBox1";
 			this.toolStripComboBox1.Size = new System.Drawing.Size(300, 25);
 			// 
@@ -470,7 +540,8 @@ namespace AndroidCodeGenerate
 			this.replaceButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.替换文件中ToolStripMenuItem,
 			this.从配置文件替换ToolStripMenuItem,
-			this.保留正则表达式ToolStripMenuItem});
+			this.保留正则表达式ToolStripMenuItem,
+			this.模板数组ToolStripMenuItem});
 			this.replaceButton.Image = ((System.Drawing.Image)(resources.GetObject("replaceButton.Image")));
 			this.replaceButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.replaceButton.Name = "replaceButton";
@@ -499,34 +570,56 @@ namespace AndroidCodeGenerate
 			this.保留正则表达式ToolStripMenuItem.Text = "保留(正则表达式)";
 			this.保留正则表达式ToolStripMenuItem.Click += new System.EventHandler(this.保留正则表达式ToolStripMenuItemClick);
 			// 
+			// 模板数组ToolStripMenuItem
+			// 
+			this.模板数组ToolStripMenuItem.Name = "模板数组ToolStripMenuItem";
+			this.模板数组ToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+			this.模板数组ToolStripMenuItem.Text = "模板（数组）";
+			this.模板数组ToolStripMenuItem.Click += new System.EventHandler(this.模板数组ToolStripMenuItemClick);
+			// 
+			// splitContainer1
+			// 
+			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer1.Location = new System.Drawing.Point(0, 75);
+			this.splitContainer1.Name = "splitContainer1";
+			// 
+			// splitContainer1.Panel1
+			// 
+			this.splitContainer1.Panel1.Controls.Add(this.textBox1);
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.textBox2);
+			this.splitContainer1.Size = new System.Drawing.Size(598, 70);
+			this.splitContainer1.SplitterDistance = 273;
+			this.splitContainer1.TabIndex = 3;
+			// 
 			// textBox1
 			// 
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBox1.Location = new System.Drawing.Point(0, 75);
+			this.textBox1.Location = new System.Drawing.Point(0, 0);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox1.Size = new System.Drawing.Size(598, 70);
-			this.textBox1.TabIndex = 3;
+			this.textBox1.Size = new System.Drawing.Size(273, 70);
+			this.textBox1.TabIndex = 0;
 			// 
-			// 排序indexhtmlToolStripMenuItem
+			// textBox2
 			// 
-			this.排序indexhtmlToolStripMenuItem.Name = "排序indexhtmlToolStripMenuItem";
-			this.排序indexhtmlToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-			this.排序indexhtmlToolStripMenuItem.Text = "排序index.html";
-			this.排序indexhtmlToolStripMenuItem.Click += new System.EventHandler(this.排序indexhtmlToolStripMenuItemClick);
-			// 
-			// toolStripSeparator5
-			// 
-			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(190, 6);
+			this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBox2.Location = new System.Drawing.Point(0, 0);
+			this.textBox2.Multiline = true;
+			this.textBox2.Name = "textBox2";
+			this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBox2.Size = new System.Drawing.Size(321, 70);
+			this.textBox2.TabIndex = 0;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(598, 145);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.toolStrip3);
 			this.Controls.Add(this.toolStrip2);
 			this.Controls.Add(this.toolStrip1);
@@ -538,6 +631,12 @@ namespace AndroidCodeGenerate
 			this.toolStrip2.PerformLayout();
 			this.toolStrip3.ResumeLayout(false);
 			this.toolStrip3.PerformLayout();
+			this.splitContainer1.Panel1.ResumeLayout(false);
+			this.splitContainer1.Panel1.PerformLayout();
+			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+			this.splitContainer1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

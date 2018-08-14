@@ -143,8 +143,9 @@
 	{
 		public static string Capitalize(this string value)
 		{
-			if (!string.IsNullOrEmpty(value) && char.IsLower(value[0])) {
-				return value.Substring(0, 1).ToUpper() + value.Substring(1);
+			//  && char.IsLower(value[0])
+			if (!string.IsNullOrEmpty(value)) {
+				return value.Substring(0, 1).ToUpper() + value.Substring(1).ToLower();
 			}
 			return value;
 		}
@@ -249,7 +250,22 @@
 			else
 				return value.Substring(0, index);
 		}
-	
+		public static string SubstringBefore(this string value, string delimiter)
+		{
+			var index = value.IndexOf(delimiter);
+			if (index == -1)
+				return value;
+			else
+				return value.Substring(0, index);
+		}
+	public static string SubstringBeforeLast(this string value, string delimiter)
+		{
+			var index = value.LastIndexOf(delimiter);
+			if (index == -1)
+				return value;
+			else
+				return value.Substring(0, index);
+		}
 		public static IEnumerable<string> ReadAllLines(this string p)
 		{
 

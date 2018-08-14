@@ -92,6 +92,18 @@ namespace AndroidCodeGenerate
 			}
 			return string.Join("\n", ls);
 		}
+			public static String GenerateTracker(string value)
+		{
+			var lines = value.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+			var ls = new List<String>();
+			foreach (var element in lines) {
+				ls.Add(element);
+				if (element.Contains("fun ") && element.Contains("(") && element.Contains("{")) {
+					ls.Add(String.Format("mTracker.e(\"[{0}]\")", element.Split(new char[]{ '(' }, 2).First().Trim().Split(' ').Last()));
+				}
+			}
+			return string.Join("\n", ls);
+		}
 		public static string GenerateKotilinCompileCommand(string path)
 		{
 			var kotlin = @"C:\Program Files\Android\Android Studio\plugins\Kotlin\kotlinc\bin\kotlinc.bat";
@@ -128,13 +140,40 @@ namespace AndroidCodeGenerate
 		
 		public static String FormatLog(string value)
 		{
+			var matches= Regex.Matches(Clipboard.GetText(), "\\b[a-zA-Z_0-9]+\\b").Cast<Match>().Select(i => i.Value).ToArray();
+			var excludes=new []{"Int","it","until","TAG","null","in","Log","private","Boolean","let","var","val","fun","if","else","for","override","false","true","return","super"};
+			var ls=new List<String>();
+			foreach (var element in matches) {
+				if(excludes.Contains(element)||ls.Contains(element)||Regex.IsMatch(element,"^[0-9]+$"))continue;
+				ls.Add(element);
+			}
+			return string.Format("Log.e(TAG, \n{0}\n)",string.Join("\n+",ls.OrderBy(i=>i).Select(i=>string.Format("\"{0} ${{{0}}},\\n\"",i))));
+//			var ls = Regex.Matches(Clipboard.GetText(), "(?<=var|val) +([0-9a-zA-Z_]+)").Cast<Match>().Select(i => i.Groups[1].Value);
+//
+//			ls = ls.Union(Regex.Matches(Clipboard.GetText(), "([0-9a-zA-Z_]+) *?(?:[%\\*\\-\\+/]*?\\=|\\:)").Cast<Match>().Select(i => i.Groups[1].Value)).Distinct();
+//
+//			var sb = new StringBuilder();
+//			//sb.Append("Log.e(TAG,\"");
+//			sb.Append("Log.e(TAG,\"");
+////			sb.Append(Clipboard.GetText().Split(new[] { '(' }, 2).First().Split(' ').Last());
+////			sb.Append("\",\"");
+//
+//			//
+//			foreach (var item in ls) {
+//				sb.Append(item + " => ${" + item + "} \\n");
+//			}
+//			sb.Append("\")");
+//			return sb.ToString();
+		}
+		public static String FormatTracker(string value)
+		{
 			var ls = Regex.Matches(Clipboard.GetText(), "(?<=var|val) +([0-9a-zA-Z_]+)").Cast<Match>().Select(i => i.Groups[1].Value);
 
 			ls = ls.Union(Regex.Matches(Clipboard.GetText(), "([0-9a-zA-Z_]+) *?(?:[%\\*\\-\\+/]*?\\=|\\:)").Cast<Match>().Select(i => i.Groups[1].Value)).Distinct();
 
 			var sb = new StringBuilder();
 			//sb.Append("Log.e(TAG,\"");
-			sb.Append("Log.e(TAG,\"");
+			sb.Append("mTracker.e(\"");
 //			sb.Append(Clipboard.GetText().Split(new[] { '(' }, 2).First().Split(' ').Last());
 //			sb.Append("\",\"");
 
@@ -145,7 +184,6 @@ namespace AndroidCodeGenerate
 			sb.Append("\")");
 			return sb.ToString();
 		}
-		
 		public static string FormatJavaFieldToKotlin(string value)
 		{
 			var ls = value.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries).Select(i => i.Trim()).Where(i => !i.StartsWith("//"));
@@ -351,6 +389,55 @@ namespace AndroidCodeGenerate
 			
 		}
 		
+		public static String FormatProperties(string value){
+		
+            string[] lsr = null;
+            var isFirst = false;
+            if (Regex.IsMatch(value, "}\\s+(?:var|val)"))
+            {
+                isFirst = true;
+                lsr = Regex.Split(value, "}\\s+(?=var\\s+|val\\s+)", RegexOptions.Multiline);
+
+            }
+            else
+            {
+                lsr = Regex.Split(value, "^\\s+(?=var\\s+|val\\s+)", RegexOptions.Multiline);
+            }
+            if (lsr.Any())
+            {
+
+                var result = lsr.Where(i => !string.IsNullOrWhiteSpace(i))
+                    .OrderBy(i => i.Split(':').First().Split(' ').Last()).ToList();
+                if (isFirst)
+                {
+                    result = result.Select(i => i + "}").ToList();
+                }
+                //.OrderBy(i => i.Trim().Split(new[] { ' ' }, 2).First()).Select(i =>
+                // {
+                //     i = i.Trim();
+                //     if (!i.StartsWith("var ") && i.Contains("set("))
+                //         return "var " + i;
+                //     else if (!i.StartsWith("val ") && !i.Contains("set("))
+                //         return "val " + i;
+                //     else
+                //         return i;
+                // });
+
+                return string.Join("\n", result);
+            }
+
+            return null;
+		}
+		public static String FormatDelegate(string value)
+		{
+			  
+			var lines = value.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+			var singleItems = lines.Where(i => (i.StartsWith("val") || i.StartsWith("fun ") || i.StartsWith("private fun") || i.StartsWith("private val")) && i.Contains(") = ") && !i.EndsWith("{")).ToArray();
+			var sss = lines.Except(singleItems).ToArray();
+			var ls = Formatter.FormatMethodList(string.Join("\n", lines.Where(i => !singleItems.Contains(i)))).Select(i => i.Trim()).OrderBy(i => i.SubstringBefore("by").Trim().Split(' ').Last()).ToArray();
+
+			return string.Join("\n", singleItems.OrderBy(i => i)) + "\n" + string.Join("\n", ls);
+		}
 		public static String FormatFun(string value)
 		{
 			  

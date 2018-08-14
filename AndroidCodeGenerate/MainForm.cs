@@ -209,7 +209,7 @@ namespace AndroidCodeGenerate
 			var find = toolStripComboBox1.Text;
 			if (find.IsReadable() && textBox1.Text.IsReadable()) {
 				var matches = textBox1.Text.KeepMatches(find).Select(i => i.Trim()).OrderBy(i => i);
-				textBox1.Text = string.Join(",", matches);
+				textBox1.Text = string.Join("\r\n", matches);
 			}
 		}
 		void FileButtonButtonClick(object sender, EventArgs e)
@@ -361,14 +361,47 @@ namespace AndroidCodeGenerate
 			                              	
 				if (path.IsDirectory()) {
 					 
-			                              		var files=Directory.GetFiles(path,"*.html",SearchOption.AllDirectories).Where(i=>i.EndsWith("index.html"));
-			                              		foreach (var element in files) {
-			                              			element.WriteAllText(AndroidExtensions.FormatJetBrainExportHtml(element));
-			                              		}
+					var files = Directory.GetFiles(path, "*.html", SearchOption.AllDirectories).Where(i => i.EndsWith("index.html"));
+					foreach (var element in files) {
+						element.WriteAllText(AndroidExtensions.FormatJetBrainExportHtml(element));
+					}
 				}
 			                              	
 			});
 		
+		}
+		void TrackerToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Helpers.OnClipboardString(AndroidExtensions.FormatTracker);
+		}
+		void Tracker文件ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Helpers.OnClipboardString(AndroidExtensions.GenerateTracker);
+	
+		}
+		void 模板数组ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var array=textBox1.Text.Trim().Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries);
+			var template=textBox2.Text.Trim();
+			
+			var list=new List<String>();
+			
+			foreach (var element in array) {
+				var line=string.Format(template,element);
+				line=line.Replace("{0}",string.Join("",element.Split('_').Select(i=>i.Capitalize())));
+				list.Add(line);
+			}
+			  Clipboard.SetText(string.Join(Environment.NewLine,list));
+
+		}
+		void Sort_properClick(object sender, EventArgs e)
+		{
+	Helpers.OnClipboardString(AndroidExtensions.FormatProperties);
+		}
+		void SortDelegateButtonClick(object sender, EventArgs e)
+		{
+	Helpers.OnClipboardString(AndroidExtensions.FormatDelegate);
+	
 		}
 	}
 }
