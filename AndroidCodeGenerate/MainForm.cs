@@ -381,27 +381,43 @@ namespace AndroidCodeGenerate
 		}
 		void 模板数组ToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			var array=textBox1.Text.Trim().Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries);
-			var template=textBox2.Text.Trim();
+			var array = textBox1.Text.Trim().Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+			var template = textBox2.Text.Trim();
 			
-			var list=new List<String>();
+			var list = new List<String>();
 			
 			foreach (var element in array) {
-				var line=string.Format(template,element);
-				line=line.Replace("{0}",string.Join("",element.Split('_').Select(i=>i.Capitalize())));
+				var line = string.Format(template, element);
+				line = line.Replace("{0}", string.Join("", element.Split('_').Select(i => i.Capitalize())));
 				list.Add(line);
 			}
-			  Clipboard.SetText(string.Join(Environment.NewLine,list));
+			Clipboard.SetText(string.Join(Environment.NewLine, list));
 
 		}
 		void Sort_properClick(object sender, EventArgs e)
 		{
-	Helpers.OnClipboardString(AndroidExtensions.FormatProperties);
+			Helpers.OnClipboardString(AndroidExtensions.FormatProperties);
 		}
 		void SortDelegateButtonClick(object sender, EventArgs e)
 		{
-	Helpers.OnClipboardString(AndroidExtensions.FormatDelegate);
+			Helpers.OnClipboardString(AndroidExtensions.FormatDelegate);
 	
+		}
+		void 删除文件空行ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+	Helpers.OnClipboardFileSystem((path) => {
+				if (Directory.Exists(path)) {
+			                              		var files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(i=>Regex.IsMatch(i,"\\.(?:java|kt|xml|cs|css|js|html|htm|c)"));
+					foreach (var element in files) {
+			                              			var lines = element.ReadAllLines().Where(i=>i.IsReadable());
+			                              			element.WriteAllText(string.Join("\n",lines));
+			                            
+						
+			                              			
+					}
+				}
+			                              	
+			});
 		}
 	}
 }

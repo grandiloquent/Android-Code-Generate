@@ -31,7 +31,7 @@ namespace AndroidCodeGenerate
 						return xd.CompareTo(yd);
 					}
 				} else if ((x.Contains('=') && !y.Contains('=')) ||
-				          (y.Contains('=') && !x.Contains('='))) {
+				           (y.Contains('=') && !x.Contains('='))) {
 					return x.Split('=').First().Trim().Split(' ').Last().CompareTo(y.Split('=').First().Trim().Split(' ').Last());
 				
 				} else if (x.Contains(':') && y.Contains(':')) {
@@ -87,12 +87,12 @@ namespace AndroidCodeGenerate
 			foreach (var element in lines) {
 				ls.Add(element);
 				if (element.Contains("fun ") && element.Contains("(") && element.Contains("{")) {
-					ls.Add(String.Format("Log.e(TAG,\"[{0}]\")", element.Split(new char[]{ '(' }, 2).First().Trim().Split(' ').Last()));
+					ls.Add(String.Format("Log.i(TAG,\"[{0}]\")", element.Split(new char[]{ '(' }, 2).First().Trim().Split(' ').Last()));
 				}
 			}
 			return string.Join("\n", ls);
 		}
-			public static String GenerateTracker(string value)
+		public static String GenerateTracker(string value)
 		{
 			var lines = value.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries);
 			var ls = new List<String>();
@@ -140,14 +140,30 @@ namespace AndroidCodeGenerate
 		
 		public static String FormatLog(string value)
 		{
-			var matches= Regex.Matches(Clipboard.GetText(), "\\b[a-zA-Z_0-9]+\\b").Cast<Match>().Select(i => i.Value).ToArray();
-			var excludes=new []{"Int","it","until","TAG","null","in","Log","private","Boolean","let","var","val","fun","if","else","for","override","false","true","return","super"};
-			var ls=new List<String>();
+			var list = new List<String>();
+			var matches = Regex.Matches(value, "\\(([^\\)]*?)\\)").Cast<Match>().Select(i => i.Groups[1].Value);
 			foreach (var element in matches) {
-				if(excludes.Contains(element)||ls.Contains(element)||Regex.IsMatch(element,"^[0-9]+$"))continue;
-				ls.Add(element);
+				var	lines = Regex.Replace(element, "\r\n", "").Split(',').Select(i => i.Trim());
+				list.AddRange(lines);
 			}
-			return string.Format("Log.e(TAG, \n{0}\n)",string.Join("\n+",ls.OrderBy(i=>i).Select(i=>string.Format("\"{0} ${{{0}}},\\n\"",i))));
+			var sb = new StringBuilder();
+			sb.Append("Log.i(TAG,");
+			list = list.Distinct().ToList();
+			
+			foreach (var element in list) {
+				sb.AppendFormat("\"{0} ${{{0}}}\\n\"+\n", element);
+			}
+			sb.AppendLine(")");
+			return sb.ToString();
+			
+//			var matches= Regex.Matches(Clipboard.GetText(), "\\b[a-zA-Z_0-9]+\\b").Cast<Match>().Select(i => i.Value).ToArray();
+//			var excludes=new []{"Int","it","until","TAG","null","in","Log","private","Boolean","let","var","val","fun","if","else","for","override","false","true","return","super"};
+//			var ls=new List<String>();
+//			foreach (var element in matches) {
+//				if(excludes.Contains(element)||ls.Contains(element)||Regex.IsMatch(element,"^[0-9]+$"))continue;
+//				ls.Add(element);
+//			}
+//			return string.Format("Log.e(TAG, \n{0}\n)",string.Join("\n+",ls.OrderBy(i=>i).Select(i=>string.Format("\"{0} ${{{0}}},\\n\"",i))));
 //			var ls = Regex.Matches(Clipboard.GetText(), "(?<=var|val) +([0-9a-zA-Z_]+)").Cast<Match>().Select(i => i.Groups[1].Value);
 //
 //			ls = ls.Union(Regex.Matches(Clipboard.GetText(), "([0-9a-zA-Z_]+) *?(?:[%\\*\\-\\+/]*?\\=|\\:)").Cast<Match>().Select(i => i.Groups[1].Value)).Distinct();
@@ -276,13 +292,14 @@ namespace AndroidCodeGenerate
 		{
 			var hd = new HtmlAgilityPack.HtmlDocument();
 			hd.LoadHtml(fileName.ReadAllText());
-			var ls=	hd.DocumentNode.SelectNodes("//a").OrderBy(i=>{
-			                                                   	if(i.GetAttributeValue("href","").EndsWith("index.html"))
-			                                                   		return  ".";
-			                                                   	else return i.GetAttributeValue("href","");
-			                                                   }).Select(i=>i.OuterHtml+"<br>").ToArray();
+			var ls =	hd.DocumentNode.SelectNodes("//a").OrderBy(i => {
+				if (i.GetAttributeValue("href", "").EndsWith("index.html"))
+					return  ".";
+				else
+					return i.GetAttributeValue("href", "");
+			}).Select(i => i.OuterHtml + "<br>").ToArray();
 			
-			hd.DocumentNode.InnerHtml=string.Join(Environment.NewLine,ls);
+			hd.DocumentNode.InnerHtml = string.Join(Environment.NewLine, ls);
 			
 			return hd.DocumentNode.OuterHtml;
 				
@@ -389,44 +406,41 @@ namespace AndroidCodeGenerate
 			
 		}
 		
-		public static String FormatProperties(string value){
+		public static String FormatProperties(string value)
+		{
 		
-            string[] lsr = null;
-            var isFirst = false;
-            if (Regex.IsMatch(value, "}\\s+(?:var|val)"))
-            {
-                isFirst = true;
-                lsr = Regex.Split(value, "}\\s+(?=var\\s+|val\\s+)", RegexOptions.Multiline);
+			string[] lsr = null;
+			// var isFirst = false;
+// isFirst = true;
+			lsr = Regex.Split(value, "\\s+(?=va[rl]\\s+[a-zA-Z_0-9]+\\:)", RegexOptions.Multiline);
+//			if (Regex.IsMatch(value, "}\\s+(?:var|val)")) {
+//               
+//
+//			} else {
+//				// lsr = Regex.Split(value, "^\\s+(?=var\\s+|val\\s+)", RegexOptions.Multiline);
+//			}
+			if (lsr.Any()) {
 
-            }
-            else
-            {
-                lsr = Regex.Split(value, "^\\s+(?=var\\s+|val\\s+)", RegexOptions.Multiline);
-            }
-            if (lsr.Any())
-            {
-
-                var result = lsr.Where(i => !string.IsNullOrWhiteSpace(i))
+				var result = lsr.Where(i => !string.IsNullOrWhiteSpace(i))
                     .OrderBy(i => i.Split(':').First().Split(' ').Last()).ToList();
-                if (isFirst)
-                {
-                    result = result.Select(i => i + "}").ToList();
-                }
-                //.OrderBy(i => i.Trim().Split(new[] { ' ' }, 2).First()).Select(i =>
-                // {
-                //     i = i.Trim();
-                //     if (!i.StartsWith("var ") && i.Contains("set("))
-                //         return "var " + i;
-                //     else if (!i.StartsWith("val ") && !i.Contains("set("))
-                //         return "val " + i;
-                //     else
-                //         return i;
-                // });
+				//if (isFirst) {
+					//result = result.Select(i => i + "}").ToList();
+			//	}
+				//.OrderBy(i => i.Trim().Split(new[] { ' ' }, 2).First()).Select(i =>
+				// {
+				//     i = i.Trim();
+				//     if (!i.StartsWith("var ") && i.Contains("set("))
+				//         return "var " + i;
+				//     else if (!i.StartsWith("val ") && !i.Contains("set("))
+				//         return "val " + i;
+				//     else
+				//         return i;
+				// });
 
-                return string.Join("\n", result);
-            }
+				return string.Join("\n", result);
+			}
 
-            return null;
+			return null;
 		}
 		public static String FormatDelegate(string value)
 		{

@@ -64,6 +64,7 @@ namespace AndroidCodeGenerate
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.ToolStripButton sort_proper;
 		private System.Windows.Forms.ToolStripButton sortDelegateButton;
+		private System.Windows.Forms.ToolStripMenuItem 删除文件空行ToolStripMenuItem;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -137,6 +138,7 @@ namespace AndroidCodeGenerate
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.删除文件空行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
 			this.toolStrip3.SuspendLayout();
@@ -345,6 +347,7 @@ namespace AndroidCodeGenerate
 			this.排序indexhtmlToolStripMenuItem,
 			this.toolStripSeparator5,
 			this.cleanJavaFileToolStripMenuItem,
+			this.删除文件空行ToolStripMenuItem,
 			this.压缩目录下Kotlin文件ToolStripMenuItem,
 			this.压缩安卓项目ToolStripMenuItem,
 			this.压缩子目录ToolStripMenuItem,
@@ -613,6 +616,13 @@ namespace AndroidCodeGenerate
 			this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBox2.Size = new System.Drawing.Size(321, 70);
 			this.textBox2.TabIndex = 0;
+			// 
+			// 删除文件空行ToolStripMenuItem
+			// 
+			this.删除文件空行ToolStripMenuItem.Name = "删除文件空行ToolStripMenuItem";
+			this.删除文件空行ToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.删除文件空行ToolStripMenuItem.Text = "删除文件空行";
+			this.删除文件空行ToolStripMenuItem.Click += new System.EventHandler(this.删除文件空行ToolStripMenuItemClick);
 			// 
 			// MainForm
 			// 
