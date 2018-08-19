@@ -419,5 +419,11 @@ namespace AndroidCodeGenerate
 			                              	
 			});
 		}
-	}
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            Helpers.OnClipboardString(CSharpExtensions.FormatCSharpCode);
+
+        }
+    }
 }
